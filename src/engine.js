@@ -18,6 +18,7 @@
 		removeUpdateFunction() // Remove tick item based on id
 		addRenderFunction() // Add's object to be rendered and what layer to render it on
 		removeRenderFunction() // Remove render object based on id
+		addCustomUpdateFunction(function) // Adds a custom update event
 		
 		
 		start(FPS) // Creates interval to update game. with required FPS
@@ -80,6 +81,10 @@ var Engine = function(canvasOptions){
 	
 	this.addUpdateFunction = function(name, callback){							// Add's Update Functions
 		obj.updateFunctions[name] = callback;									// If object is going to be removed make unique id
+	};
+	
+	this.addCustomUpdateFunction = function(name, callback){                    // Add's Custom Update Function
+		obj.updateFunctions[name] = callback;
 	};
 	
 	this.removeUpdateFunction = function(name){									// Removes Update Functions useing unique id
