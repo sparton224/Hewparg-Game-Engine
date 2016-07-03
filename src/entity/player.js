@@ -24,6 +24,8 @@
 		setRunning() // Changes player speed to running
 		
 		setTexture() // Sets the player image to the player
+		
+		intersect() // Check Player in not colliding with other entities.
 ========================================================================================= */
 
 
@@ -78,6 +80,10 @@ var Player = function(){
 		return obj.options.y;
 	};
 	
+	this.getCurrentSpeed = function(){
+		return obj.options.currentSpeed;
+	};
+	
 	this.setWalking = function(){                                                                                         // Changes player speed to walking
 		obj.options.currentSpeed = obj.options.speed.walking;
 	};
@@ -89,5 +95,28 @@ var Player = function(){
 	this.setTexture = function(src){                                                                                      // Sets player texture
 		obj.options.texture = new Image();                                                                                // Creates new image variable
 		obj.options.texture.src = src;                                                                                    // Loads image
+	};
+	
+	this.intersect = function(entity, offsetX, offsetY){
+		var r1 = {
+			right : (obj.options.x + obj.options.width + offsetX),
+			left : obj.options.x + offsetX,
+			top : obj.options.y + offsetY,
+			bottom : (obj.options.y + obj.options.height + offsetY)
+		};
+		for(var i = 0; i < entity.length; i++){
+			for(var x = 0; x < entity[i].length; x++){
+				var r2 = {
+					right : ( entity[i][x].getX() + entity[i][x].getWidth() ),
+					left : entity[i][x].getX(),
+					top : entity[i][x].getY(),
+					bottom : ( entity[i][x].getY() + entity[i][x].getHeight() )
+				};
+				if(!(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top)){
+					return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
+				}
+			}
+		}
+		return false;
 	};
 };

@@ -5,40 +5,50 @@
         <title>Untitled Document</title>
     </head>
     <body>
-   		<script src="../src/engine.js"></script>
-		<script src="../src/entity/player.js"></script>
-        <script src="../src/input/keyManager.js"></script>
-        <script>
-			var keyCode = { a : 65,	b : 66,	c : 67,	d : 68,	e : 69,	f : 70,	g : 71,	h : 72,
-				i : 73,	j : 74,	k : 75,	l : 76,	m : 77,	n : 78,	o : 79,	p : 80, q : 81, r : 82,
-				s : 83,	t : 84,	u : 85,	v : 86,	w : 87,	x : 88,	y : 89,	z : 90, Shift : 16 };
-		
-			var playground = new Engine({
-				border : "1px solid #CCC"
-			});
-			
-			var client = new Player();
-			var key = new KeyManager();
-			
-			client.setTexture("media/textures/player.png");
-			
-			playground.addRenderFunction("client", client.render);
-			playground.addUpdateFunction("client", client.update);
-			
-			playground.addCustomUpdateFunction("MovePlayer", function(){
-				if(key.getKey(keyCode.a)){ client.moveX(-1); }else  // Move Client West
-				if(key.getKey(keyCode.d)){ client.moveX(1); }       // Move Client East
-				if(key.getKey(keyCode.w)){ client.moveY(-1);}else   // Move Player North
-				if(key.getKey(keyCode.s)){ client.moveY(1); }       // Move Player South
+    	<div align="center">
+            W = North, S = South, A = West, D = East, Shift = Run
+            <script src="../src/engine.js"></script>
+            <script src="../src/entity/player.js"></script>
+            <script src="../src/input/keyManager.js"></script>
+			<script src="../src/entity/static/staticEntity.js"></script>
+			<script src="../src/entity/entityManagement.js"></script>
+            <script>
+                var keyCode = { a : 65,	b : 66,	c : 67,	d : 68,	e : 69,	f : 70,	g : 71,	h : 72,
+                    i : 73,	j : 74,	k : 75,	l : 76,	m : 77,	n : 78,	o : 79,	p : 80, q : 81, r : 82,
+                    s : 83,	t : 84,	u : 85,	v : 86,	w : 87,	x : 88,	y : 89,	z : 90, Shift : 16 };
+            
+                var playground = new Engine({
+                    border : "1px solid #CCC"
+                });
+                
+                var client = new Player();
+                var key = new KeyManager();
+                
+                client.setTexture("media/textures/player.png");
+                
+				var EManager = new EntityManager();
+				EManager.addStaticEntity(new staticEntity("media/textures/tree.png", 32 * 10, 32 * 10, 32, 32, true));
+				EManager.addStaticEntity(new staticEntity("media/textures/tree.png", 32 * 7, 32 * 10, 32, 32, true));
+				EManager.setPlayer(client);
 				
-				if(key.getKey(keyCode.Shift) == true){				// Change Movement Speed
-					client.setRunning();
-				}else{
-					client.setWalking();
-				}
-			});
-			
-			playground.start(30);
-		</script>
+				playground.addRenderFunction("EM", EManager.render);
+				playground.addUpdateFunction("EM", EManager.update);
+					    
+                playground.addCustomUpdateFunction("MovePlayer", function(){
+                    if(key.getKey(keyCode.a) && !client.intersect(EManager.getEntityList(), -client.getCurrentSpeed(), 0)){ client.moveX(-1); }else  // Move Client West
+                    if(key.getKey(keyCode.d) && !client.intersect(EManager.getEntityList(), client.getCurrentSpeed(), 0)){ client.moveX(1); }       // Move Client East
+                    if(key.getKey(keyCode.w) && !client.intersect(EManager.getEntityList(), 0, -client.getCurrentSpeed())){ client.moveY(-1);}else   // Move Player North
+                    if(key.getKey(keyCode.s) && !client.intersect(EManager.getEntityList(), 0, client.getCurrentSpeed())){ client.moveY(1); }       // Move Player South
+                    
+                    if(key.getKey(keyCode.Shift) == true){				// Change Movement Speed
+                        client.setRunning();
+                    }else{
+                        client.setWalking();
+                    }
+                });
+                
+                playground.start(30);
+            </script>
+       </div>
     </body>
 </html>

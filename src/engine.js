@@ -110,7 +110,6 @@ var Engine = function(canvasOptions){
 	
 	this.clear = function(){                                                    // Clears Canvas Screen to stop texture blur
 		obj.context.clearRect(0, 0, obj.canvas.width, obj.canvas.height);
-		console.log("Canvas Cleared");
 	};
 	
 	this.intervalHandler = null;                                                // Timer Handler
