@@ -6,11 +6,20 @@
     </head>
     <body>
    		<script src="../src/engine.js"></script>
+		<script src="../src/entity/player.js"></script>
         <script>
 			var playground = new Engine({
 				border : "1px solid #CCC"
 			});
-			playground.fullScreen();
+			
+			var client = new Player();
+			
+			client.setTexture("media/textures/player.png");
+			
+			playground.addRenderFunction("client", client.render);
+			playground.addUpdateFunction("client", client.update);
+			
+			playground.start(30);
 		</script>
     </body>
 </html>

@@ -19,6 +19,11 @@
 		addRenderFunction() // Add's object to be rendered and what layer to render it on
 		removeRenderFunction() // Remove render object based on id
 		
+		
+		start(FPS) // Creates interval to update game. with required FPS
+		stop()     // Stop the interval timer
+		
+		clear()    // Clears the screen should never be called apart from in the core update
 ========================================================================================= */
 
 
@@ -96,6 +101,25 @@ var Engine = function(canvasOptions){
 	
 	this.removeRenderFunction = function(name){									// Removes render function using unique id
 		delete obj.renderFunctions[name];
+	};
+	
+	this.clear = function(){                                                    // Clears Canvas Screen to stop texture blur
+		obj.context.clearRect(0, 0, obj.canvas.width, obj.canvas.height);
+		console.log("Canvas Cleared");
+	};
+	
+	this.intervalHandler = null;                                                // Timer Handler
+	
+	this.start = function(FPS){                                                 // Starts game timer
+		obj.intervalHandler = setInterval(function(){
+			obj.clear();
+			obj.render();
+			obj.update();
+		}, 1000 / FPS);
+	};
+	
+	this.stop = function(){                                                     // Stops game timer
+		delete obj.intervalHandler;
 	};
 	
 	
